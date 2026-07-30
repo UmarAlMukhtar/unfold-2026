@@ -6,7 +6,8 @@ import Hls from 'hls.js';
 import './style.css';
 
 const HLS_SOURCE = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8';
-const REGISTER_URL = '#';
+const REGISTER_URL = 'https://makemypass.com/event/unfold-2026';
+const EMAIL_ADDRESS = 'srieeejtchapterkerala@gmail.com';
 
 function VideoBackground({ flip = false }: { flip?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
@@ -16,7 +17,7 @@ function VideoBackground({ flip = false }: { flip?: boolean }) {
 
 function LoadingScreen({ done }: { done: () => void }) {
   const [count, setCount] = useState(0); const callback = useRef(done); callback.current = done;
-  useEffect(() => { const start = performance.now(); let frame = 0; const tick = (now: number) => { const next = Math.min(100, Math.floor((now - start) / 27)); setCount(next); next < 100 ? frame = requestAnimationFrame(tick) : setTimeout(() => callback.current(), 350); }; frame = requestAnimationFrame(tick); return () => cancelAnimationFrame(frame); }, []);
+  useEffect(() => { const start = performance.now(); let frame = 0; const tick = (now: number) => { const next = Math.min(100, Math.floor((now - start) / 14)); setCount(next); next < 100 ? frame = requestAnimationFrame(tick) : setTimeout(() => callback.current(), 250); }; frame = requestAnimationFrame(tick); return () => cancelAnimationFrame(frame); }, []);
   return <div className="fixed inset-0 z-[9999] bg-bg p-6 md:p-10"><p className="text-xs uppercase tracking-[.3em] text-muted">UNFOLD / 2026</p><p className="absolute inset-0 grid place-items-center font-display text-5xl italic text-text-primary/80 md:text-7xl">BUILDING</p><p className="absolute bottom-8 right-6 font-display text-7xl tabular-nums md:bottom-10 md:right-10 md:text-9xl">{String(count).padStart(3, '0')}</p><div className="absolute bottom-0 left-0 h-[3px] w-full bg-stroke/50"><div className="accent-gradient h-full origin-left" style={{ transform: `scaleX(${count / 100})` }} /></div></div>;
 }
 
@@ -29,6 +30,11 @@ function Countdown() {
 
 const reveal = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: .65 } };
 function SectionTitle({ label, title, text }: { label: string; title: React.ReactNode; text?: string }) { return <motion.div {...reveal} className="mb-10"><p className="mb-4 flex items-center gap-3 text-xs uppercase tracking-[.28em] text-muted"><i className="h-px w-8 bg-stroke" />{label}</p><h2 className="mb-4 text-4xl tracking-tight md:text-6xl">{title}</h2>{text && <p className="max-w-2xl text-sm leading-relaxed text-muted md:text-base">{text}</p>}</motion.div>; }
+
+function Accordion({ label, title, children, initiallyOpen = false }: { label?: string; title: string; children: React.ReactNode; initiallyOpen?: boolean }) {
+  const [open, setOpen] = useState(initiallyOpen);
+  return <div className="border-t border-stroke py-5"><button type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex w-full items-center gap-5 text-left"><span className="w-16 text-xs uppercase tracking-[.15em] text-muted">{label}</span><strong className={label ? 'flex-1 font-display text-2xl italic md:text-4xl' : 'flex-1 text-base font-medium md:text-lg'}>{title}</strong><motion.b animate={{ rotate: open ? 45 : 0 }} className="text-xl font-normal">+</motion.b></button><AnimatePresence initial={false}>{open && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .28, ease: 'easeInOut' }} className="overflow-hidden"><div className={label ? 'ml-[84px] mt-4 max-w-xl text-sm text-muted' : 'mt-3 max-w-2xl text-sm leading-relaxed text-muted'}>{children}</div></motion.div>}</AnimatePresence></div>;
+}
 
 function App() {
   const [loading, setLoading] = useState(true); const [role, setRole] = useState(0);
@@ -58,12 +64,12 @@ function App() {
       <section id="about" className="mx-auto max-w-[1100px] px-6 py-20 md:py-28">
         <SectionTitle label="About UNFOLD 2026" title={<>From campus project to <em className="font-display italic">venture.</em></>} text="UNFOLD is a focused 48-hour transition from academic project to a venture-ready startup. Build clarity around your problem, validate it with mentors, and leave with a stronger story for what comes next." />
         <div className="grid gap-4 md:grid-cols-3">
-          {[['IEEE IA/IE/PELS', 'Joint Chapter'], ['CCE IEEE SB', 'Student Branch'], ['CCE IEDC', 'Innovation & entrepreneurship']].map(([name, detail]) => <article key={name} className="rounded-3xl border border-stroke bg-surface p-6"><p className="font-display text-2xl italic">{name}</p><p className="mt-2 text-sm text-muted">{detail}</p></article>)}
+          {[['IEEE IA/IE/PELS', 'Joint Chapter Kerala'], ['CCE IEEE SB', 'Student Branch']].map(([name, detail]) => <article key={name} className="rounded-3xl border border-stroke bg-surface p-6"><p className="font-display text-2xl italic">{name}</p><p className="mt-2 text-sm text-muted">{detail}</p></article>)}
         </div>
       </section>
       <section className="border-y border-stroke bg-surface/30 px-6 py-20 md:py-28">
         <div className="mx-auto max-w-[1100px]">
-          <SectionTitle label="The pre-IEDC advantage" title={<>More than a <em className="font-display italic">hackathon.</em></>} text="A practical launchpad built for students and early-stage founders who are ready to move their work forward." />
+          <SectionTitle label="The advantage" title={<>More than a <em className="font-display italic">hackathon.</em></>} text="A practical launchpad built for students and early-stage founders who are ready to move their work forward." />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[['01', 'Startup mentorship', 'Get direct feedback on the problem, product and pitch.'], ['02', 'Investor exposure', 'Learn what makes an early idea credible to the next room.'], ['03', 'Networking', 'Meet builders, mentors and future collaborators.'], ['04', 'Incentives', '10–15 KTU Points plus duty leave support.']].map(([num, title, body]) => <article key={title} className="rounded-3xl border border-stroke bg-bg p-6"><p className="mb-8 font-display text-3xl italic text-muted">{num}</p><h3 className="mb-2 text-lg">{title}</h3><p className="text-sm leading-relaxed text-muted">{body}</p></article>)}
           </div>
@@ -97,14 +103,14 @@ function App() {
       <section id="schedule" className="border-y border-stroke bg-surface/30 px-6 py-20 md:py-28">
         <div className="mx-auto max-w-[1100px]">
           <SectionTitle label="Two-day programme" title={<>Build, pitch, <em className="font-display italic">sustain.</em></>} />
-          {[['Day 1', 'Ideate + Validate + Build', 'Frame the problem, test the assumptions and turn your idea into a working direction.'], ['Day 2', 'Pitch + Scale + Sustain', 'Refine your venture story, learn the next moves and present the work.']].map(([day, title, text]) => <details key={day} className="group border-t border-stroke py-6" open={day === 'Day 1'}><summary className="flex cursor-pointer items-center gap-5"><span className="w-16 text-xs uppercase tracking-[.15em] text-muted">{day}</span><strong className="flex-1 font-display text-2xl italic md:text-4xl">{title}</strong><b className="text-xl font-normal group-open:rotate-45">+</b></summary><p className="ml-[84px] mt-4 max-w-xl text-sm text-muted">{text}</p></details>)}
+          {[['Day 1', 'Ideate + Validate + Build', 'Frame the problem, test the assumptions and turn your idea into a working direction.'], ['Day 2', 'Pitch + Scale + Sustain', 'Refine your venture story, learn the next moves and present the work.']].map(([day, title, text], index) => <Accordion key={day} label={day} title={title} initiallyOpen={index === 0}>{text}</Accordion>)}
         </div>
       </section>
       <section className="mx-auto max-w-[1100px] px-6 py-20 md:py-28"><SectionTitle label="Speakers & mentors" title={<>Built for honest <em className="font-display italic">feedback.</em></>} text="The mentor and speaker lineup will be announced shortly. The programme is designed around practical, small-group conversations—not passive sessions." /><div className="flex flex-wrap gap-5">{['Mentor lineup', 'Founder sessions', 'Investor conversations'].map((item) => <div key={item} className="flex items-center gap-4 rounded-full border border-stroke bg-surface p-3 pr-6"><span className="grid h-12 w-12 place-items-center rounded-full bg-stroke font-display text-xl italic">UF</span><span className="text-sm">{item}</span></div>)}</div></section>
       <section id="register" className="border-y border-stroke bg-surface/30 px-6 py-20 md:py-28"><div className="mx-auto max-w-[1100px]"><SectionTitle label="Registration" title={<>Save your <em className="font-display italic">spot.</em></>} text="Registration is handled securely through MakeMyPass. Final prices and category availability will be listed there." /><div className="grid gap-4 md:grid-cols-3">{[['Student pass', 'For B.Tech/M.Tech students', 'Price on MakeMyPass'], ['Graduate pass', 'For recent engineering graduates', 'Price on MakeMyPass'], ['Founder pass', 'For early-stage founders and teams', 'Price on MakeMyPass']].map(([name, audience, price], index) => <article key={name} className={`rounded-3xl border p-7 ${index === 1 ? 'border-[#89AACC] bg-[#89AACC]/10' : 'border-stroke bg-bg'}`}><p className="text-xs uppercase tracking-[.18em] text-muted">{name}</p><p className="my-6 font-display text-3xl italic">{price}</p><p className="mb-8 text-sm text-muted">{audience}</p><a href={REGISTER_URL} target="_blank" rel="noreferrer" className="gradient-ring block rounded-full border border-stroke px-4 py-3 text-center text-sm">Register ↗</a></article>)}</div></div></section>
       <section className="mx-auto grid max-w-[1100px] gap-10 px-6 py-20 md:grid-cols-2 md:py-28"><div><SectionTitle label="Venue & logistics" title={<>CCE, <em className="font-display italic">Irinjalakuda.</em></>} text="Christ College of Engineering will host two days of building, critique and venture-focused conversations. Exact reporting details will be shared with registered participants." /><p className="text-sm text-muted">Christ College of Engineering, Irinjalakuda<br />Kerala, India</p></div><iframe className="min-h-[320px] w-full rounded-3xl border border-stroke grayscale" title="Christ College of Engineering location" loading="lazy" src="https://maps.google.com/maps?q=Christ%20College%20of%20Engineering%20Irinjalakuda&z=15&output=embed" /></section>
-      <section className="border-y border-stroke bg-surface/30 px-6 py-20"><div className="mx-auto max-w-[1100px]"><SectionTitle label="Sponsors & partners" title={<>The people who make it <em className="font-display italic">possible.</em></>} text="Partner and sponsor announcements will appear here as they are confirmed." /><div className="grid grid-cols-2 gap-3 md:grid-cols-4">{['IEEE IA/IE/PELS', 'CCE IEEE SB', 'CCE IEDC', 'Partner announcement'].map((name) => <div key={name} className="grid min-h-24 place-items-center rounded-2xl border border-stroke bg-bg p-4 text-center text-sm text-muted grayscale transition hover:grayscale-0 hover:text-text-primary">{name}</div>)}</div></div></section>
-      <section id="faq" className="mx-auto max-w-[900px] px-6 py-20 md:py-28"><SectionTitle label="FAQ" title={<>Questions, <em className="font-display italic">answered.</em></>} />{[['Who is UNFOLD for?', '3rd and 4th year engineering students, B.Tech/M.Tech graduates, and early-stage founders.'], ['Where will UNFOLD take place?', 'At Christ College of Engineering (CCE), Irinjalakuda, on September 12–13, 2026.'], ['How do I register?', 'Use the MakeMyPass registration link. Final registration categories and prices are listed on that platform.'], ['Will there be duty leave and KTU points?', 'The event offers 10–15 KTU Points and duty leave support; share the final requirement with your college team.']].map(([question, answer]) => <details key={question} className="group border-t border-stroke py-5"><summary className="flex cursor-pointer items-center justify-between gap-4 text-base"><span>{question}</span><b className="text-xl font-normal group-open:rotate-45">+</b></summary><p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">{answer}</p></details>)}</section>
+      <section className="border-y border-stroke bg-surface/30 px-6 py-20"><div className="mx-auto max-w-[1100px]"><SectionTitle label="Sponsors & partners" title={<>The people who make it <em className="font-display italic">possible.</em></>} text="Our event partners." /><div className="grid grid-cols-2 gap-3 md:grid-cols-4">{[['IEEE IA/IE/PELS', '/sponsors/ieee-ia-ie-pels.png'], ['CCE IEEE SB', '/sponsors/cce-ieee-sb.png']].map(([name, src]) => <div key={name} className="grid min-h-28 place-items-center rounded-2xl border border-stroke bg-bg p-5"><img src={src} alt={`${name} logo`} className="max-h-16 max-w-full object-contain grayscale transition hover:grayscale-0" /></div>)}</div></div></section>
+      <section id="faq" className="mx-auto max-w-[900px] px-6 py-20 md:py-28"><SectionTitle label="FAQ" title={<>Questions, <em className="font-display italic">answered.</em></>} />{[['Who is UNFOLD for?', '3rd and 4th year engineering students, B.Tech/M.Tech graduates, and early-stage founders.'], ['Where will UNFOLD take place?', 'At Christ College of Engineering (CCE), Irinjalakuda, on September 12–13, 2026.'], ['How do I register?', 'Use the MakeMyPass registration link. Final registration categories and prices are listed on that platform.'], ['Will there be duty leave and KTU points?', 'The event offers 10–15 KTU Points and duty leave support; share the final requirement with your college team.']].map(([question, answer]) => <Accordion key={question} title={question}>{answer}</Accordion>)}</section>
     </main>
     <footer className="relative overflow-hidden px-6 pb-20 pt-20 md:pt-28">
       <VideoBackground flip />
@@ -114,11 +120,11 @@ function App() {
         <div className="grid gap-10 border-t border-white/10 pt-8 md:grid-cols-2">
           <div>
             <p className="mb-2 text-xs uppercase tracking-[.2em] text-muted">Contact</p>
-            <a className="text-lg hover:text-[#89AACC]" href="mailto:hello@unfold2026.com">hello@unfold2026.com</a>
+            <a className="text-lg hover:text-[#89AACC]" href={`mailto:${EMAIL_ADDRESS}`}>{EMAIL_ADDRESS}</a>
           </div>
           <div>
             <p className="mb-2 text-xs uppercase tracking-[.2em] text-muted">Organised by</p>
-            <p className="text-sm text-muted">IEEE IA/IE/PELS Joint Chapter · CCE IEEE SB · CCE IEDC</p>
+            <p className="text-sm text-muted">IEEE IA/IE/PELS Joint Chapter · CCE IEEE SB</p>
           </div>
         </div>
         <div className="mt-16 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 text-xs text-muted sm:flex-row">
